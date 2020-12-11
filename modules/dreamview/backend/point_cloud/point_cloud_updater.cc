@@ -57,11 +57,11 @@ void PointCloudUpdater::RegisterMessageHandlers() {
       [this](const Json &json, WebSocketHandler::Connection *conn) {
         std::string to_send;
         // If there is no point_cloud data for more than 2 seconds, reset.
-        if (point_cloud_str_ != "" &&
-            std::fabs(last_localization_time_ - last_point_cloud_time_) > 2.0) {
-          boost::unique_lock<boost::shared_mutex> writer_lock(mutex_);
-          point_cloud_str_ = "";
-        }
+//        if (point_cloud_str_ != "" &&
+//           std::fabs(last_localization_time_ - last_point_cloud_time_) > 2.0) {
+//          boost::unique_lock<boost::shared_mutex> writer_lock(mutex_);
+//          point_cloud_str_ = "";
+//        }
         {
           boost::shared_lock<boost::shared_mutex> reader_lock(mutex_);
           to_send = point_cloud_str_;
@@ -124,6 +124,7 @@ void PointCloudUpdater::UpdatePointCloud(const PointCloud2 &point_cloud) {
 
 void PointCloudUpdater::FilterPointCloud(
     pcl::PointCloud<pcl::PointXYZ>::Ptr pcl_ptr) {
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered (new pcl::PointCloud<pcl::PointXYZ> ());
   pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;
   voxel_grid.setInputCloud(pcl_ptr);
   voxel_grid.setLeafSize(FLAGS_voxel_filter_size, FLAGS_voxel_filter_size,

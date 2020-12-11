@@ -389,7 +389,7 @@ void VisualizationManager::DoVisualize() {
           lidar_frame.timestamp, &fusion_loc, 0);
 
       if (!lidar_query_success && !fusion_query_success) {
-        continue;
+        //continue;
       }
 
       LocalizatonInfo lidar_loc_info;
